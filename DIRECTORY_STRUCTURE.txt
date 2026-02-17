@@ -1,0 +1,55 @@
+PlantDiseaseApp/
+│
+├── 📄 app.py                          Main Flask application (backend logic)
+├── 🧠 Mobilenetv2.h5                  Trained deep learning model (YOU NEED TO ADD THIS!)
+├── ⚙️  config.py                       Configuration settings
+├── 📋 requirements.txt                Python dependencies
+├── 🧪 test_installation.py            Setup verification script
+├── 🚫 .gitignore                      Git ignore rules
+├── 📜 LICENSE                         MIT License
+│
+├── 📚 Documentation Files
+│   ├── README.md                      Complete documentation (100+ sections)
+│   ├── QUICK_START.md                 3-step quick setup guide
+│   ├── SETUP_INSTRUCTIONS.md          Detailed installation walkthrough
+│   ├── PROJECT_SUMMARY.md             Academic overview & presentation guide
+│   ├── CHANGELOG.md                   Version history & future plans
+│   └── DIRECTORY_STRUCTURE.txt        This file
+│
+├── 🎨 templates/                      HTML templates
+│   ├── index.html                     Home page with upload interface
+│   └── result.html                    Results display page
+│
+└── 📦 static/                         Static assets
+    ├── css/
+    │   └── style.css                  Custom styles & animations
+    ├── js/
+    │   └── script.js                  Frontend logic & interactions
+    └── uploads/                       Temporary upload directory
+        └── .gitkeep                   Keeps directory in git
+
+═══════════════════════════════════════════════════════════════════
+
+IMPORTANT: Before running the application, you must add your trained
+model file (Mobilenetv2.h5) to the root directory!
+
+═══════════════════════════════════════════════════════════════════
+
+FILE STATISTICS:
+├── Python Files:        3
+├── HTML Files:          2
+├── CSS Files:           1
+├── JavaScript Files:    1
+├── Documentation:       6
+├── Configuration:       4
+└── Total Files:         17
+
+═══════════════════════════════════════════════════════════════════
+
+QUICK START:
+1. Place Mobilenetv2.h5 in this directory
+2. Run: pip install -r requirements.txt
+3. Run: python app.py
+4. Open: http://localhost:5000
+
+═══════════════════════════════════════════════════════════════════
