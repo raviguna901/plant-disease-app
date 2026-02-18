@@ -2,4 +2,3 @@ gradio
 tensorflow-cpu
 numpy
 pillow
-reportlab
