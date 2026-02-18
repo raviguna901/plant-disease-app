@@ -1,4 +1,7 @@
-gradio
+flask
 tensorflow-cpu
 numpy
 pillow
+werkzeug
+reportlab
+gunicorn
