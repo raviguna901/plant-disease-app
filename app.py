@@ -258,16 +258,6 @@ def server_error(e):
 #     print("🌱 Plant Disease Detection System")
 #     print("="*50)
 #     app.run(debug=True, host='0.0.0.0', port=5000)
-interface = gr.Interface(
-    fn=gradio_predict,
-    inputs=gr.Image(type="pil"),
-    outputs="text",
-    title="🌱 Plant Disease Detection",
-    description="Upload plant image to detect disease using AI."
-)
-
-interface.launch()
-
 def hf_predict(img):
     img = img.resize((256,256)).convert("RGB")
     arr = np.array(img)/255.0
@@ -279,6 +269,9 @@ def hf_predict(img):
 
     disease = CLASS_NAMES[idx].replace("___"," - ").replace("_"," ")
 
+    if conf < 70:
+        return "❌ Please upload a clear plant leaf image."
+
     return f"Disease: {disease}\nConfidence: {conf:.2f}%"
 
 iface = gr.Interface(
@@ -286,7 +279,7 @@ iface = gr.Interface(
     inputs=gr.Image(type="pil"),
     outputs="text",
     title="🌱 Plant Disease Detection",
-    description="Upload leaf image"
+    description="Upload plant leaf image to detect disease."
 )
 
 iface.launch(server_name="0.0.0.0", server_port=7860)
