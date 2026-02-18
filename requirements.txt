@@ -1,6 +1,5 @@
-flask
-tensorflow-cpu
 gradio
-pillow
+tensorflow-cpu
 numpy
+pillow
 reportlab

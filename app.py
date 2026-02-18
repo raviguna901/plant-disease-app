@@ -5,17 +5,17 @@ Uses MobileNetV2 model for image classification
 import gradio as gr
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-from flask import send_file
-from flask import Flask, render_template, request, jsonify, url_for
+# from flask import send_file
+# from flask import Flask, render_template, request, jsonify, url_for
 import os
 import numpy as np
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from PIL import Image
 import json
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 # Configuration
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -170,81 +170,81 @@ def gradio_predict(image):
     return f"Disease: {disease}\nConfidence: {confidence:.2f}%"
 
 
-@app.route('/')
-def index():
-    """Render the home page"""
-    return render_template('index.html')
+# @app.route('/')
+# def index():
+#     """Render the home page"""
+#     return render_template('index.html')
 
 
-@app.route('/predict', methods=['POST'])
-def predict():
+# @app.route('/predict', methods=['POST'])
+# def predict():
 
-    if 'file' not in request.files:
-        return redirect('/')
+#     if 'file' not in request.files:
+#         return redirect('/')
 
-    file = request.files['file']
+#     file = request.files['file']
 
-    if file.filename == '':
-        return redirect('/')
+#     if file.filename == '':
+#         return redirect('/')
 
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(filepath)
+#     filename = secure_filename(file.filename)
+#     filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+#     file.save(filepath)
 
-    result = predict_disease(filepath)
+#     result = predict_disease(filepath)
 
-    info = DISEASE_INFO.get(result["disease"], {
-        "desc": "No description available.",
-        "remedy": "Consult agricultural expert."
-    })
+#     info = DISEASE_INFO.get(result["disease"], {
+#         "desc": "No description available.",
+#         "remedy": "Consult agricultural expert."
+#     })
 
-    return render_template(
-        "result.html",
-        disease=result["disease"],
-        confidence=result["confidence"],
-        image=filename,
-        description=info["desc"],
-        remedy=info["remedy"]
-    )
-
-
-@app.route('/result')
-def result():
-    """Render the result page"""
-    return render_template('result.html')
-
-@app.route('/download_report')
-def download_report():
-    file_path = "report.pdf"
-
-    c = canvas.Canvas(file_path, pagesize=A4)
-    c.drawString(100, 800, "Plant Disease Detection Report")
-    c.drawString(100, 760, f"Disease: {request.args.get('disease')}")
-    c.drawString(100, 730, f"Confidence: {request.args.get('confidence')}%")
-    c.drawString(100, 700, f"Description: {request.args.get('desc')}")
-    c.drawString(100, 670, f"Remedy: {request.args.get('remedy')}")
-
-    c.save()
-
-    return send_file(file_path, as_attachment=True)
+#     return render_template(
+#         "result.html",
+#         disease=result["disease"],
+#         confidence=result["confidence"],
+#         image=filename,
+#         description=info["desc"],
+#         remedy=info["remedy"]
+#     )
 
 
-@app.errorhandler(413)
-def too_large(e):
-    """Handle file too large error"""
-    return jsonify({'error': 'File is too large. Maximum size is 16MB'}), 413
+# @app.route('/result')
+# def result():
+#     """Render the result page"""
+#     return render_template('result.html')
+
+# @app.route('/download_report')
+# def download_report():
+#     file_path = "report.pdf"
+
+#     c = canvas.Canvas(file_path, pagesize=A4)
+#     c.drawString(100, 800, "Plant Disease Detection Report")
+#     c.drawString(100, 760, f"Disease: {request.args.get('disease')}")
+#     c.drawString(100, 730, f"Confidence: {request.args.get('confidence')}%")
+#     c.drawString(100, 700, f"Description: {request.args.get('desc')}")
+#     c.drawString(100, 670, f"Remedy: {request.args.get('remedy')}")
+
+#     c.save()
+
+#     return send_file(file_path, as_attachment=True)
 
 
-@app.errorhandler(404)
-def not_found(e):
-    """Handle 404 errors"""
-    return render_template('index.html'), 404
+# @app.errorhandler(413)
+# def too_large(e):
+#     """Handle file too large error"""
+#     return jsonify({'error': 'File is too large. Maximum size is 16MB'}), 413
 
 
-@app.errorhandler(500)
-def server_error(e):
-    """Handle 500 errors"""
-    return jsonify({'error': 'Internal server error'}), 500
+# @app.errorhandler(404)
+# def not_found(e):
+#     """Handle 404 errors"""
+#     return render_template('index.html'), 404
+
+
+# @app.errorhandler(500)
+# def server_error(e):
+#     """Handle 500 errors"""
+#     return jsonify({'error': 'Internal server error'}), 500
 
 
 # if __name__ == '__main__':
