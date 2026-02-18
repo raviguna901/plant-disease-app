@@ -2,6 +2,7 @@
 Plant Disease Detection Flask Application
 Uses MobileNetV2 model for image classification
 """
+import gradio as gr
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from flask import send_file
@@ -152,6 +153,22 @@ def predict_disease(img_path):
             "class_index": -1
         }
 
+def gradio_predict(image):
+
+    image = image.resize((256,256)).convert("RGB")
+    img_array = np.array(image) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+
+    predictions = model.predict(img_array, verbose=0)
+    idx = np.argmax(predictions)
+    confidence = float(np.max(predictions))*100
+
+    disease = CLASS_NAMES[idx].replace("___"," - ").replace("_"," ")
+    if confidence < 70:
+        return "❌ Please upload a clear plant leaf image."
+
+    return f"Disease: {disease}\nConfidence: {confidence:.2f}%"
+
 
 @app.route('/')
 def index():
@@ -230,14 +247,46 @@ def server_error(e):
     return jsonify({'error': 'Internal server error'}), 500
 
 
-if __name__ == '__main__':
-    # Check if model file exists
-    if not os.path.exists(MODEL_PATH):
-        print(f"⚠ Warning: Model file '{MODEL_PATH}' not found!")
-        print("Please ensure Mobilenetv2.h5 is in the same directory as app.py")
+# if __name__ == '__main__':
+#     # Check if model file exists
+#     if not os.path.exists(MODEL_PATH):
+#         print(f"⚠ Warning: Model file '{MODEL_PATH}' not found!")
+#         print("Please ensure Mobilenetv2.h5 is in the same directory as app.py")
 
-    # Run the Flask app
-    print("="*50)
-    print("🌱 Plant Disease Detection System")
-    print("="*50)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+#     # Run the Flask app
+#     print("="*50)
+#     print("🌱 Plant Disease Detection System")
+#     print("="*50)
+#     app.run(debug=True, host='0.0.0.0', port=5000)
+interface = gr.Interface(
+    fn=gradio_predict,
+    inputs=gr.Image(type="pil"),
+    outputs="text",
+    title="🌱 Plant Disease Detection",
+    description="Upload plant image to detect disease using AI."
+)
+
+interface.launch()
+
+def hf_predict(img):
+    img = img.resize((256,256)).convert("RGB")
+    arr = np.array(img)/255.0
+    arr = np.expand_dims(arr,0)
+
+    preds = model.predict(arr, verbose=0)
+    idx = np.argmax(preds)
+    conf = float(np.max(preds))*100
+
+    disease = CLASS_NAMES[idx].replace("___"," - ").replace("_"," ")
+
+    return f"Disease: {disease}\nConfidence: {conf:.2f}%"
+
+iface = gr.Interface(
+    fn=hf_predict,
+    inputs=gr.Image(type="pil"),
+    outputs="text",
+    title="🌱 Plant Disease Detection",
+    description="Upload leaf image"
+)
+
+iface.launch(server_name="0.0.0.0", server_port=7860)
